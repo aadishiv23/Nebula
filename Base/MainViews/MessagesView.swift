@@ -30,73 +30,32 @@ let event = Event(title: "Buy Daisies", date: .now, location: "Flower Shop", sym
 struct MessagesView: View {
     @Environment(\.colorScheme) var colorScheme
     @State private var messageText = ""
-    @State private var messages: [String] = [] // Array to hold sent messages
+    @State private var messages: [ChatMessage] = []
     var modelName: String
     
     
     var body: some View {
         NavigationStack {
-            /*VStack {
-                Text("Chat")
-                    .font(.title3)
-                    .fontWeight(.bold)
-                    .foregroundColor(.white)
-                
-                Text(modelName)
-                    .font(.footnote)
-                    .foregroundColor(.white)
-            }
-            .frame(height: 56)
-            .background(Color(UIColor.systemGray))
-            .shadow(color: .gray.opacity(0.2), radius: 5)*/
-            /* ZStack {
-             ZStack {
-             Image(systemName: "person.circle")
-             .imageScale(.large)
-             }
-             
-             Rectangle()
-             .foregroundStyle(.teal)
-             .ignoresSafeArea()
-             .frame(maxWidth: .infinity, maxHeight: UIScreen.main.bounds.height*0.08)
-             VStack() {
-             Text("Chat")
-             .font(.title)
-             .fontWeight(.bold)
-             .fontDesign(.rounded)
-             
-             Text(modelName)
-             .font(.footnote)
-             .foregroundStyle(.gray)
-             }
-             
-             }
-             .background(Rectangle()
-             .foregroundStyle(.teal)
-             
-             .frame(minWidth: UIScreen.main.bounds.width, minHeight: UIScreen.main.bounds.height*0.1)
-             .opacity(colorScheme == .dark ? 0.3 : 0.6)
-             //.background(Color.gray.opacity(0.2)) // Gray background similar to iMessage
-             
-             )*/
-            
-            
+          
+    
             ScrollView {
                 VStack(spacing: 8) {
                     //ConversationTile(event: event)
                     //ConversationTile(event: event)
                     VStack(spacing: 5) {
-                        ForEach(messages, id: \.self) { message in
+                        ForEach(messages) { message in
                             // Each message is in a blue rectangle with white text
-                            MessageBubble(message: message)
-                            //.transition(.asymmetric(insertion: .scale, removal: .opacity)) // Animation for message insertion and removal
+                            MessageBubble(message: message.text)
+                                .transition(.asymmetric(insertion: .scale, removal: .opacity))
+
                             
                         }
                     }
                 }
             }
             .navigationTitle(modelName)
-            .animation(.snappy(duration: 0.2), value: messages) // Apply animation when messages change
+            .animation(.snappy(duration: 0.2), value: messages)
+ // Apply animation when messages change
             //.animation(.spring(dampingFraction: 0.5))
             //.animation(.ripple())
             
@@ -135,16 +94,22 @@ struct MessagesView: View {
         //.navigationBarBackButtonHidden(true)
     }
     func sendMessage() {
-        guard !messageText.isEmpty else { return } // Don't send empty messages
-        withAnimation { // Wrap state changes in an animation block
-            messages.append(messageText) // Append new message
+        guard !messageText.isEmpty else { return }
+        let newMessage = ChatMessage(text: messageText)
+        withAnimation(.snappy(duration: 0.2)) {
+            messages.append(newMessage)
         }
-        messageText = "" // Clear the input field
+        messageText = ""
     }
        
     
 }
 
+
+struct ChatMessage: Identifiable, Equatable {
+    let id = UUID()
+    let text: String
+}
 
 struct MessagesView_Previews: PreviewProvider {
     static var previews: some View {
