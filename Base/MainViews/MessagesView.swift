@@ -14,6 +14,12 @@ extension Animation {
     }
 }
 
+extension Animation {
+    static func snappy() -> Animation {
+        Animation.spring(response: 0.6, dampingFraction: 0.5, blendDuration: 0.5)
+    }
+}
+
 /// HWS
 /// https://www.hackingwithswift.com/plus/swiftui-special-effects/shadows-and-glows
 extension View {
@@ -52,6 +58,8 @@ struct MessagesView: View {
                             
                         }
                     }
+                    .animation(.snappy(), value: messages.count) // Trigger animation when message count changes
+
                 }
             }
             .navigationTitle(modelName)
@@ -65,6 +73,7 @@ struct MessagesView: View {
 
                 }
             }
+
             NavigationLink("",  destination: ModelInformationView(), isActive: $showingModelInfo)
             .animation(.snappy(duration: 0.2), value: messages)
  // Apply animation when messages change

@@ -19,45 +19,64 @@ struct Event: Hashable {
 struct ConversationTile: View {
     let event: Event
     let stripeHeight = 15.0
+    @State private var rate = 1.0
+
+    @State private var isSelected = false
     var body: some View {
-        HStack(alignment: .firstTextBaseline) {
+        ZStack(alignment: .topLeading) {
             Image(systemName: event.symbol)
                 .font(.title)
-            VStack(alignment: .leading) {
+                .padding([.top, .leading]) // Padding to move the image to the top left
+                .rotationEffect(isSelected ? .degrees(15) : .zero)
+            
+            VStack {
+                Spacer() // Pushes content to the bottom
                 Text(event.title)
-                    .font(.title)
+                    .font(.title2)
                     .lineLimit(1)
-                Text(
-                    event.date,
-                    format: Date.FormatStyle()
-                        .day(.defaultDigits)
-                        .month(.wide)
-                )
-                Text(event.location)
+                    .padding([.leading, .bottom]) // Padding for the title
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         }
+        .scaleEffect(isSelected ? 1.2 : 1.0)
+        .gesture(
+                TapGesture()
+                    .onEnded { _ in
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            isSelected = true
+                        }
+                        withAnimation(Animation.easeInOut(duration: 0.2).repeatCount(5, autoreverses: true)) {
+                            // Jiggle effect
+                        }
+                        withAnimation(Animation.easeInOut(duration: 0.2).delay(0.2)) {
+                            isSelected = false
+                        }
+                    }
+            )
         .padding()
-        .padding(.bottom, stripeHeight)
         .background{
             ZStack(alignment: .bottom) {
                 Rectangle()
-                    .frame(maxHeight: stripeHeight)
-                Rectangle()
                     .frame(width: 200, height: 200)
                     .opacity(0.3)
-               
+                    .mask(RoundedRectangle(cornerRadius: stripeHeight))
+                Rectangle()
+                    .frame(width: 200, height: 200/5)
+                    
             }
             .foregroundStyle(.teal)
         }
-        .clipShape(RoundedRectangle(cornerRadius: stripeHeight, style: .continuous))
-        .frame(width: 200, height: 200, alignment: .center)
+        .scaleEffect(isSelected ? 1.1 : 1.0)
+        // .animation(.spring, value: rate)
+        .frame(width: 170, height: 170, alignment: .center).cornerRadius(15).shadow(radius: 20).padding(20)
+        
     }
 }
 
 
 struct ConversationTile_Preview: PreviewProvider {
     static let event = Event(title: "Buy Daisies", date: .now, location: "Flower Shop", symbol: "gift")
-
+    
     static var previews: some View {
         ConversationTile(event: event)
     }
