@@ -16,6 +16,7 @@
 		ACE070B02B2FC685002E0768 /* Square.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE070AF2B2FC685002E0768 /* Square.swift */; };
 		ACE070B22B30840A002E0768 /* MessageBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE070B12B30840A002E0768 /* MessageBubble.swift */; };
 		ACE070B42B31223B002E0768 /* ModelListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE070B32B31223B002E0768 /* ModelListView.swift */; };
+		ACE070B62B32AA62002E0768 /* ModelInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE070B52B32AA62002E0768 /* ModelInformationView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +30,7 @@
 		ACE070AF2B2FC685002E0768 /* Square.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Square.swift; sourceTree = "<group>"; };
 		ACE070B12B30840A002E0768 /* MessageBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBubble.swift; sourceTree = "<group>"; };
 		ACE070B32B31223B002E0768 /* ModelListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelListView.swift; sourceTree = "<group>"; };
+		ACE070B52B32AA62002E0768 /* ModelInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelInformationView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +84,7 @@
 			children = (
 				ACE0709A2B2EC250002E0768 /* BaseApp.swift */,
 				ACE070B32B31223B002E0768 /* ModelListView.swift */,
+				ACE070B52B32AA62002E0768 /* ModelInformationView.swift */,
 				ACE0709C2B2EC251002E0768 /* MessagesView.swift */,
 				ACE070A82B2EC273002E0768 /* HomeView.swift */,
 			);
@@ -175,6 +178,7 @@
 				ACE070A92B2EC273002E0768 /* HomeView.swift in Sources */,
 				ACE0709D2B2EC251002E0768 /* MessagesView.swift in Sources */,
 				ACE0709B2B2EC250002E0768 /* BaseApp.swift in Sources */,
+				ACE070B62B32AA62002E0768 /* ModelInformationView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

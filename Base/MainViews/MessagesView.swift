@@ -30,6 +30,7 @@ let event = Event(title: "Buy Daisies", date: .now, location: "Flower Shop", sym
 struct MessagesView: View {
     @Environment(\.colorScheme) var colorScheme
     @State private var messageText = ""
+    @State private var showingModelInfo = false
     @State private var messages: [ChatMessage] = []
     var modelName: String
     
@@ -54,6 +55,17 @@ struct MessagesView: View {
                 }
             }
             .navigationTitle(modelName)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showingModelInfo = true
+                    } label: {
+                        Image(systemName: "info.circle")
+                    }
+
+                }
+            }
+            NavigationLink("",  destination: ModelInformationView(), isActive: $showingModelInfo)
             .animation(.snappy(duration: 0.2), value: messages)
  // Apply animation when messages change
             //.animation(.spring(dampingFraction: 0.5))
