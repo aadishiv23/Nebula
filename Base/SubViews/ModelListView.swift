@@ -7,10 +7,11 @@
 
 import Foundation
 import SwiftUI
-
+import Combine
 let sampleModels: [String] = ["GPT-4", "GPT-3.5", "Gemini Pro"]
 
 struct ModelListView: View {
+    //var cancellables: Set<AnyCancellable>
     var body: some View {
         NavigationStack {
             Form {
@@ -33,8 +34,9 @@ struct ModelListView: View {
     }
 }
 
-struct ModelListView_Previews: PreviewProvider {
+/*struct ModelListView_Previews: PreviewProvider {
+   // static var cancellables: Set<AnyCancellable>
     static var previews: some View {
-        ModelListView()
+        ModelListView(cancellables: cancellables)
     }
-}
+}*/

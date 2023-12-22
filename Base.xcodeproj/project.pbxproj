@@ -17,6 +17,10 @@
 		ACE070B22B30840A002E0768 /* MessageBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE070B12B30840A002E0768 /* MessageBubble.swift */; };
 		ACE070B42B31223B002E0768 /* ModelListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE070B32B31223B002E0768 /* ModelListView.swift */; };
 		ACE070B62B32AA62002E0768 /* ModelInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE070B52B32AA62002E0768 /* ModelInformationView.swift */; };
+		ACE070B92B34A995002E0768 /* OpenAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE070B82B34A995002E0768 /* OpenAIService.swift */; };
+		ACE070BC2B34AA73002E0768 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = ACE070BB2B34AA73002E0768 /* Alamofire */; };
+		ACE070BE2B34AF71002E0768 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE070BD2B34AF71002E0768 /* Constants.swift */; };
+		ACE070C12B34EC07002E0768 /* TempView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE070C02B34EC07002E0768 /* TempView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +35,9 @@
 		ACE070B12B30840A002E0768 /* MessageBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBubble.swift; sourceTree = "<group>"; };
 		ACE070B32B31223B002E0768 /* ModelListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelListView.swift; sourceTree = "<group>"; };
 		ACE070B52B32AA62002E0768 /* ModelInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelInformationView.swift; sourceTree = "<group>"; };
+		ACE070B82B34A995002E0768 /* OpenAIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIService.swift; sourceTree = "<group>"; };
+		ACE070BD2B34AF71002E0768 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		ACE070C02B34EC07002E0768 /* TempView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -38,6 +45,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ACE070BC2B34AA73002E0768 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +71,9 @@
 		ACE070992B2EC250002E0768 /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				ACE0709A2B2EC250002E0768 /* BaseApp.swift */,
+				ACE070BF2B34EBEB002E0768 /* SubViews */,
+				ACE070B72B34A984002E0768 /* Models */,
 				ACE070AC2B2FBCCA002E0768 /* ComponentViews */,
 				ACE070AA2B2FBCAD002E0768 /* MainViews */,
 				ACE0709E2B2EC252002E0768 /* Assets.xcassets */,
@@ -82,11 +93,9 @@
 		ACE070AA2B2FBCAD002E0768 /* MainViews */ = {
 			isa = PBXGroup;
 			children = (
-				ACE0709A2B2EC250002E0768 /* BaseApp.swift */,
-				ACE070B32B31223B002E0768 /* ModelListView.swift */,
 				ACE070B52B32AA62002E0768 /* ModelInformationView.swift */,
-				ACE0709C2B2EC251002E0768 /* MessagesView.swift */,
 				ACE070A82B2EC273002E0768 /* HomeView.swift */,
+				ACE070C02B34EC07002E0768 /* TempView.swift */,
 			);
 			path = MainViews;
 			sourceTree = "<group>";
@@ -99,6 +108,24 @@
 				ACE070AF2B2FC685002E0768 /* Square.swift */,
 			);
 			path = ComponentViews;
+			sourceTree = "<group>";
+		};
+		ACE070B72B34A984002E0768 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				ACE070B82B34A995002E0768 /* OpenAIService.swift */,
+				ACE070BD2B34AF71002E0768 /* Constants.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		ACE070BF2B34EBEB002E0768 /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				ACE070B32B31223B002E0768 /* ModelListView.swift */,
+				ACE0709C2B2EC251002E0768 /* MessagesView.swift */,
+			);
+			path = SubViews;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -117,6 +144,9 @@
 			dependencies = (
 			);
 			name = Base;
+			packageProductDependencies = (
+				ACE070BB2B34AA73002E0768 /* Alamofire */,
+			);
 			productName = Base;
 			productReference = ACE070972B2EC250002E0768 /* Base.app */;
 			productType = "com.apple.product-type.application";
@@ -145,6 +175,9 @@
 				Base,
 			);
 			mainGroup = ACE0708E2B2EC250002E0768;
+			packageReferences = (
+				ACE070BA2B34AA73002E0768 /* XCRemoteSwiftPackageReference "Alamofire" */,
+			);
 			productRefGroup = ACE070982B2EC250002E0768 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -176,9 +209,12 @@
 				ACE070B22B30840A002E0768 /* MessageBubble.swift in Sources */,
 				ACE070AE2B2FBCE7002E0768 /* ConversationTile.swift in Sources */,
 				ACE070A92B2EC273002E0768 /* HomeView.swift in Sources */,
+				ACE070BE2B34AF71002E0768 /* Constants.swift in Sources */,
 				ACE0709D2B2EC251002E0768 /* MessagesView.swift in Sources */,
 				ACE0709B2B2EC250002E0768 /* BaseApp.swift in Sources */,
 				ACE070B62B32AA62002E0768 /* ModelInformationView.swift in Sources */,
+				ACE070C12B34EC07002E0768 /* TempView.swift in Sources */,
+				ACE070B92B34A995002E0768 /* OpenAIService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -384,6 +420,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		ACE070BA2B34AA73002E0768 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.8.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		ACE070BB2B34AA73002E0768 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ACE070BA2B34AA73002E0768 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = ACE0708F2B2EC250002E0768 /* Project object */;
 }

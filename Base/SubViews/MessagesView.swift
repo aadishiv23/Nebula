@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import Combine
 /// make work faster
 extension Animation {
     static func ripple() -> Animation {
@@ -38,13 +38,17 @@ struct MessagesView: View {
     @State private var messageText = ""
     @State private var showingModelInfo = false
     @State private var messages: [ChatMessage] = []
+    @State private var cancellables = Set<AnyCancellable>()
+    
+    let openAIService = OpenAIService()
+    
     var modelName: String
     
     
     var body: some View {
         NavigationStack {
-          
-    
+            
+            
             ScrollView {
                 VStack(spacing: 8) {
                     //ConversationTile(event: event)
@@ -52,14 +56,14 @@ struct MessagesView: View {
                     VStack(spacing: 5) {
                         ForEach(messages) { message in
                             // Each message is in a blue rectangle with white text
-                            MessageBubble(message: message.text)
+                            MessageBubble(message: message)
                                 .transition(.asymmetric(insertion: .scale, removal: .opacity))
-
+                            
                             
                         }
                     }
                     .animation(.snappy(), value: messages.count) // Trigger animation when message count changes
-
+                    
                 }
             }
             .navigationTitle(modelName)
@@ -70,13 +74,13 @@ struct MessagesView: View {
                     } label: {
                         Image(systemName: "info.circle")
                     }
-
+                    
                 }
             }
-
+            
             NavigationLink("",  destination: ModelInformationView(), isActive: $showingModelInfo)
-            .animation(.snappy(duration: 0.2), value: messages)
- // Apply animation when messages change
+                .animation(.snappy(duration: 0.2), value: messages)
+            // Apply animation when messages change
             //.animation(.spring(dampingFraction: 0.5))
             //.animation(.ripple())
             
@@ -115,30 +119,59 @@ struct MessagesView: View {
         //.navigationBarBackButtonHidden(true)
     }
     func sendMessage() {
-        guard !messageText.isEmpty else { return }
-        let newMessage = ChatMessage(text: messageText)
-        withAnimation(.snappy(duration: 0.2)) {
-            messages.append(newMessage)
+        /*guard !messageText.isEmpty else { return }
+         let newMessage = ChatMessage(content: messageText)
+         withAnimation(.snappy(duration: 0.2)) {
+         messages.append(newMessage)
+         }*/
+        let myMessage = ChatMessage(id: UUID().uuidString, content: messageText, dateCreated: Date(), sender: .user)
+        messages.append(myMessage)
+        openAIService.sendModel(message: messageText).sink { completion in
+            // handle error
+        } receiveValue: { response in
+            guard let textResponse = response.choices.first?.text else { return }
+            let gptMessage = ChatMessage(id: response.id, content: textResponse, dateCreated: Date(), sender: .gpt)
+            messages.append(gptMessage)
         }
+        .store(in: &cancellables)
+        
         messageText = ""
     }
-       
+    
+    func openAISendMessage() {
+        openAIService.sendModel(message: messageText).sink { completion in
+            // handle error
+        } receiveValue: { response in
+            guard let textResponse = response.choices.first?.text else { return }
+            let gptMessage = ChatMessage(id: response.id, content: textResponse, dateCreated: Date(), sender: .gpt)
+        }
+        .store(in: &cancellables)
+        
+        messageText = ""
+    }
     
 }
 
 
 struct ChatMessage: Identifiable, Equatable {
-    let id = UUID()
-    let text: String
+    let id: String
+    let content: String
+    let dateCreated: Date
+    let sender: MessageSender
 }
 
+
+enum MessageSender {
+    case user
+    case gpt
+}
 struct MessagesView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             MessagesView(modelName: "Example")
                 .preferredColorScheme(.light)
                 .previewDisplayName("Light Mode")
-
+            
             MessagesView(modelName: "Example")
                 .preferredColorScheme(.dark)
                 .previewDisplayName("Dark Mode")
