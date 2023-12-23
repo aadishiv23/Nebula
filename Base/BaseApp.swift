@@ -23,11 +23,12 @@ struct BaseApp: App {
                 
                 ModelListView()
                     .tabItem {Label("User", systemImage: "list.bullet.clipboard")}
-                TempView()
+                ConversationScreen()
                     .tabItem {
                         Label("Temp", systemImage: "ellipsis.message.fill")
                     }
             }
+            .environmentObject(ConversationViewModel())  // Injecting the view model
         }
     }
 }

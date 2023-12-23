@@ -1,128 +1,154 @@
+// Copyright 2023 Google LLC
 //
-//  TempView.swift
-//  Base
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
 //
-//  Created by Aadi Shiv Malhotra on 12/21/23.
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
-import Foundation
+//import GenerativeAIUIComponents
+import GoogleGenerativeAI
 import SwiftUI
-import Combine
 
-struct TempView: View {
-    @State var chatMessages: [ChatMessage] = []
-    @State private var messageText = ""
+
+struct ConversationScreen: View {
+    @EnvironmentObject var viewModel: ConversationViewModel
     @State private var showingModelInfo = false
-    @State private var messages: [ChatMessage] = []
-    @State private var cancellables = Set<AnyCancellable>()
+
+    @State private var userPrompt = ""
     
-    let openAIService = OpenAIService()
+    enum FocusedField: Hashable {
+        case message
+    }
     
-    let modelName = "GPT"
+    @FocusState
+    var focusedField: FocusedField?
+    
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 8) {
-                    //ConversationTile(event: event)
-                    //ConversationTile(event: event)
-                    VStack(spacing: 5) {
-                        ForEach(messages) { message in
-                            // Each message is in a blue rectangle with white text
-                            MessageBubble(message: message)
-                                .transition(.asymmetric(insertion: .scale, removal: .opacity))
-                            
-                            
+            VStack {
+                ScrollViewReader { scrollViewProxy in
+                    
+                    VStack(spacing: 8) {
+                        //ConversationTile(event: event)
+                        //ConversationTile(event: event)
+                        VStack(spacing: 5) {
+                            ForEach(viewModel.messages) { message in
+                                // Each message is in a blue rectangle with white text
+                                MessageBubble(message: message)
+                                    .transition(.asymmetric(insertion: .scale, removal: .opacity))
+                                
+                                
+                            }
                         }
+                        .animation(.snappy(), value: viewModel.messages.count) // Trigger animation when message count changes
+                        
                     }
-                    .animation(.snappy(), value: messages.count) // Trigger animation when message count changes
-                    
+                    .onChange(of: viewModel.messages, perform: { newValue in
+                        guard let lastMessage = viewModel.messages.last else { return }
+                        
+                        // wait for a short moment to make sure we can actually scroll to the bottom
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                            withAnimation {
+                                scrollViewProxy.scrollTo(lastMessage.id, anchor: .bottom)
+                            }
+                            focusedField = .message
+                        }
+                    })
                 }
-            }
-            .padding()
-            .navigationTitle(modelName)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        showingModelInfo = true
-                    } label: {
-                        Image(systemName: "info.circle")
+                .navigationTitle("Gemini Pro")
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            showingModelInfo = true
+                        } label: {
+                            Image(systemName: "info.circle")
+                        }
+                        
                     }
+                }
+                
+                NavigationLink("",  destination: ModelInformationView(), isActive: $showingModelInfo)
+                    .animation(.snappy(duration: 0.2), value: viewModel.messages)
+                Spacer()
+                
+                ZStack(alignment: .trailing) {
+                    TextField("Message...", text: $userPrompt, axis: .vertical)
+                        .padding(12)
+                        .padding(.trailing, 48)
+                        .background(Color(uiColor: .systemBackground))
+                        .clipShape(Capsule())
+                        .glow(color: .blue, radius: 1)
+                        .font(.subheadline)
+                        .onSubmit { sendOrStop() }
                     
+                    
+                    //.onSubmit(sendMessage) // Action when "Return" is pressed
+                    //.submitLabel(.send)
+                    //Spacer()
+                    Button(action: {
+                        sendOrStop()
+                        // Action for the button
+                    }) {
+                        Image(systemName: "arrow.up.circle.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 35, height: 35) // Set the size as needed
+                            .foregroundColor(.blue) // Set the color as needed
+                            .padding()
+                    }
                 }
-            }
-            NavigationLink("",  destination: ModelInformationView(), isActive: $showingModelInfo)
-            .animation(.snappy(duration: 0.2), value: messages)
-            
-            Spacer()
-            
-            ZStack(alignment: .trailing) {
-                TextField("Message...", text: $messageText, axis: .vertical)
-                    .padding(12)
-                    .padding(.trailing, 48)
-                    .background(Color(uiColor: .systemBackground))
-                    .clipShape(Capsule())
-                    .glow(color: .blue, radius: 1)
-                    .font(.subheadline)
+                .padding(.horizontal)
                 
-                
-                //.onSubmit(sendMessage) // Action when "Return" is pressed
-                //.submitLabel(.send)
-                //Spacer()
-                Button(action: {
-                    sendMessage()
-                    // Action for the button
-                }) {
-                    Image(systemName: "arrow.up.circle.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 35, height: 35) // Set the size as needed
-                        .foregroundColor(.blue) // Set the color as needed
-                        .padding()
-                }
             }
-            .padding(.horizontal)
+            .toolbar(.hidden, for: .tabBar)
+
         }
-        .toolbar(.hidden, for: .tabBar)
-    }
-    func sendMessage() {
-        /*guard !messageText.isEmpty else { return }
-         let newMessage = ChatMessage(content: messageText)
-         withAnimation(.snappy(duration: 0.2)) {
-         messages.append(newMessage)
-         }*/
-        let myMessage = ChatMessage(id: UUID().uuidString, content: messageText, dateCreated: Date(), sender: .user)
-        messages.append(myMessage)
-        openAIService.sendModel(message: messageText).sink { completion in
-            // handle error
-        } receiveValue: { response in
-            guard let textResponse = response.choices.first?.text else { return }
-            let gptMessage = ChatMessage(id: response.id, content: textResponse, dateCreated: Date(), sender: .gpt)
-            messages.append(gptMessage)
-        }
-        .store(in: &cancellables)
-        
-        messageText = ""
     }
     
-    func openAISendMessage() {
-        openAIService.sendModel(message: messageText).sink { completion in
-            // handle error
-        } receiveValue: { response in
-            guard let textResponse = response.choices.first?.text else { return }
-            let gptMessage = ChatMessage(id: response.id, content: textResponse, dateCreated: Date(), sender: .gpt)
+    private func sendMessage() {
+        Task {
+            let prompt = userPrompt
+            userPrompt = ""
+            await viewModel.sendMessage(prompt, streaming: true)
         }
-        .store(in: &cancellables)
-        
-        messageText = ""
+    }
+    
+    private func sendOrStop() {
+        if viewModel.busy {
+            viewModel.stop()
+        } else {
+            sendMessage()
+        }
+    }
+    
+    private func newChat() {
+        viewModel.startNewChat()
     }
 }
 
-
-struct TempView_Previews: PreviewProvider {
-    // static var cancellables: Set<AnyCancellable>
+struct ConversationScreen_Previews: PreviewProvider {
+    struct ContainerView: View {
+        @StateObject var viewModel = ConversationViewModel()
+        
+        var body: some View {
+            ConversationScreen()
+                .environmentObject(viewModel)
+                .onAppear {
+                    viewModel.messages = ChatMessage.samples
+                }
+        }
+    }
+    
     static var previews: some View {
-        TempView()
-            .preferredColorScheme(.light)
-            .previewDisplayName("Light Mode")
+        NavigationStack {
+            ConversationScreen()
+        }
     }
 }

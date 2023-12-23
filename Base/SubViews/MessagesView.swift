@@ -101,7 +101,11 @@ struct MessagesView: View {
                 //.submitLabel(.send)
                 //Spacer()
                 Button(action: {
-                    sendMessage()
+                    Task {
+                        // want to change
+                        await sendMessage()
+                        
+                    }
                     // Action for the button
                 }) {
                     Image(systemName: "arrow.up.circle.fill")
@@ -118,50 +122,81 @@ struct MessagesView: View {
         //.navigationBarHidden(true)
         //.navigationBarBackButtonHidden(true)
     }
-    func sendMessage() {
-        /*guard !messageText.isEmpty else { return }
-         let newMessage = ChatMessage(content: messageText)
-         withAnimation(.snappy(duration: 0.2)) {
-         messages.append(newMessage)
-         }*/
-        let myMessage = ChatMessage(id: UUID().uuidString, content: messageText, dateCreated: Date(), sender: .user)
-        messages.append(myMessage)
-        openAIService.sendModel(message: messageText).sink { completion in
-            // handle error
-        } receiveValue: { response in
-            guard let textResponse = response.choices.first?.text else { return }
-            let gptMessage = ChatMessage(id: response.id, content: textResponse, dateCreated: Date(), sender: .gpt)
-            messages.append(gptMessage)
-        }
-        .store(in: &cancellables)
-        
+    func sendMessage() async{
+        let newMessage = ChatMessage(id: UUID().uuidString, content: messageText, dateCreated: Date(), sender: .user)
+        messages.append(newMessage)
         messageText = ""
+        
+        Task {
+            let response = await openAIService.sendModel(messages: messages)
+            guard let receivedOpenAIMessage = response?.choices.first?.message else {
+                print("no received message")
+                return
+            }
+            let receivedMessage = ChatMessage(id: UUID().uuidString, content: receivedOpenAIMessage.content, dateCreated: Date(), sender: receivedOpenAIMessage.role)
+            // running on background thread but want to add on amin
+            // network call on bg thread
+            // message call on main
+            await MainActor.run {
+                messages.append(receivedMessage)
+                
+            }
+        }
     }
     
-    func openAISendMessage() {
-        openAIService.sendModel(message: messageText).sink { completion in
-            // handle error
-        } receiveValue: { response in
-            guard let textResponse = response.choices.first?.text else { return }
-            let gptMessage = ChatMessage(id: response.id, content: textResponse, dateCreated: Date(), sender: .gpt)
-        }
-        .store(in: &cancellables)
-        
-        messageText = ""
-    }
+    
     
 }
 
 
-struct ChatMessage: Identifiable, Equatable {
+struct ChatMessage: Identifiable, Equatable, Decodable {
     let id: String
-    let content: String
+    var content: String
     let dateCreated: Date
     let sender: MessageSender
+    
+    var pending = false
+    
+    static func pending(sender: MessageSender) -> ChatMessage {
+        Self(id: UUID().uuidString, content: "", dateCreated: Date(), sender: sender, pending: true)
+    }
 }
 
+extension ChatMessage {
+  static var samples: [ChatMessage] = [
+    .init(id: UUID().uuidString, content: "Hello. What can I do for you today?", dateCreated: Date(), sender: .system),
+    .init(id: UUID().uuidString, content: "Show me a simple loop in Swift.", dateCreated: Date(), sender: .user),
+    .init(id: UUID().uuidString, content: """
+    Sure, here is a simple loop in Swift:
 
-enum MessageSender {
+    # Example 1
+    ```
+    for i in 1...5 {
+      print("Hello, world!")
+    }
+    ```
+
+    This loop will print the string "Hello, world!" five times. The for loop iterates over a range of numbers,
+    in this case the numbers from 1 to 5. The variable i is assigned each number in the range, and the code inside the loop is executed.
+
+    **Here is another example of a simple loop in Swift:**
+    ```swift
+    var sum = 0
+    for i in 1...100 {
+      sum += i
+    }
+    print("The sum of the numbers from 1 to 100 is \\(sum).")
+    ```
+
+    This loop calculates the sum of the numbers from 1 to 100. The variable sum is initialized to 0, and then the for loop iterates over the range of numbers from 1 to 100. The variable i is assigned each number in the range, and the value of i is added to the sum variable. After the loop has finished executing, the value of sum is printed to the console.
+    """, dateCreated: Date(), sender: .system),
+  ]
+
+  static var sample = samples[0]
+}
+
+enum MessageSender: String, Codable {
+    case system
     case user
     case gpt
 }

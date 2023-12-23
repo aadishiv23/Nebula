@@ -11,13 +11,12 @@ import Combine
 let sampleModels: [String] = ["GPT-4", "GPT-3.5", "Gemini Pro"]
 
 struct ModelListView: View {
-    //var cancellables: Set<AnyCancellable>
     var body: some View {
         NavigationStack {
             Form {
                 Section(header: Text("Models")) {
                     ForEach(sampleModels, id: \.self) { model in
-                        NavigationLink(destination: MessagesView( modelName: model)  )  {
+                        NavigationLink(destination: destinationView(for: model)) {
                             HStack {
                                 Image(systemName: "square.and.pencil")
                                     .foregroundColor(.blue)
@@ -32,7 +31,20 @@ struct ModelListView: View {
             .navigationBarTitle("Models")
         }
     }
+
+    @ViewBuilder
+    private func destinationView(for model: String) -> some View {
+        switch model {
+        case "GPT-4", "GPT-3.5":
+            MessagesView(modelName: model)
+        case "Gemini Pro":
+            ConversationScreen()
+        default:
+            EmptyView() // Or some default view
+        }
+    }
 }
+
 
 /*struct ModelListView_Previews: PreviewProvider {
    // static var cancellables: Set<AnyCancellable>

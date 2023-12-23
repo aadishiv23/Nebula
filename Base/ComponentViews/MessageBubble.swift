@@ -22,12 +22,15 @@ import SwiftUI
  }*/
 struct MessageBubble: View {
     var message: ChatMessage
-    
+    @Environment(\.colorScheme) var colorScheme
+
     func bubbleShape(for sender: MessageSender) -> some Shape {
         switch sender {
         case .user:
             return AnyShape(MessageBubbleShapeUser())
         case .gpt:
+            return AnyShape(MessageBubbleShapeGPT())
+        default:
             return AnyShape(MessageBubbleShapeGPT())
         }
     }
@@ -36,16 +39,22 @@ struct MessageBubble: View {
         HStack {
             if message.sender == .user { Spacer() }
             Text(message.content)
-                .foregroundColor(message.sender == .user ? .white : .black)
+                .foregroundColor(message.sender == .user ? .white : foregroundColorForGPT)
                 .padding()
-                .background(message.sender == .user ? .blue : .gray.opacity(0.1))
+                .background(message.sender == .user ? Color.blue : backgroundColorForGPT)
                 .clipShape(bubbleShape(for: message.sender))
                 .frame(maxWidth: .infinity, alignment: message.sender == .user ? .trailing : .leading) // Messages aligned to the right
                 .padding()
             if message.sender == .gpt { Spacer() }
         }
     }
-    
+    private var backgroundColorForGPT: Color {
+            colorScheme == .dark ? Color.gray.opacity(0.3) : Color.gray.opacity(0.1)
+        }
+
+        private var foregroundColorForGPT: Color {
+            colorScheme == .dark ? .white : .black
+        }
 }
 
 extension MessageBubble {

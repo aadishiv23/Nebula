@@ -12,44 +12,33 @@ import Combine
 class OpenAIService {
     // for newer gpt-4, gpt-3.5-turbo
     //"https://api.openai.com/v1/chat/completions"
-    let baseurl = "https://api.openai.com/v1/"
+    private let endpointURL = "https://api.openai.com/v1/chat/completions"
     
-    func sendModel(message: String) -> AnyPublisher<OpenAICompletionsResponse, Error> {
-        let completion  = OpenAICompletions(model: "text-davinci-003", prompt: message, temp: 0.7)
+    func sendModel(messages: [ChatMessage]) async -> OpenAIChatResponse? {
+        // conv from chatmessage to openai
+        let openAIMessages = messages.map({OpenAIChatMessage(role: $0.sender, content: $0.content)})
+        let body = OpenAIChatBody(model: "gpt-3.5-turbo", messages: openAIMessages)
         let headers: HTTPHeaders = [
-            "Authorization" : "Bearer \(Constants.openAIAPIKey)"
+            "Authorization": "Bearer \(Constants.openAIAPIKey)"
         ]
-        
-        return Future { [weak self] promise in
-            guard let self = self else { return }
-            AF.request(self.baseurl + "completions", method: .post, parameters: completion, encoder: .json, headers: headers).responseDecodable(of: OpenAICompletionsResponse.self) {response in
-                switch response.result {
-                case .success(let result):
-                    promise(.success(result))
-                case .failure(let error):
-                    print("Failure ")
-                    promise(.failure(error))
-                }
-            }
-        }
-        .eraseToAnyPublisher()
+        return try? await AF.request(endpointURL, method: .post, parameters: body, encoder: .json, headers: headers).serializingDecodable(OpenAIChatResponse.self).value
     }
 }
 
-struct OpenAICompletions : Encodable {
+struct OpenAIChatBody : Encodable {
     let model: String
-    let prompt: String
-    let temp: Float
-    
+    let messages: [OpenAIChatMessage]
 }
 
-// decode from req
-
-struct OpenAICompletionsResponse: Decodable {
-    let id: String
-    let choices: [OpenAICompletionsChoices]
+struct OpenAIChatMessage: Codable {
+    let role: MessageSender
+    let content: String
 }
 
-struct OpenAICompletionsChoices: Decodable {
-    let text: String
+struct OpenAIChatResponse: Decodable {
+    let choices: [OpenAIChatChoice]
+}
+
+struct OpenAIChatChoice: Decodable {
+    let message: OpenAIChatMessage
 }
