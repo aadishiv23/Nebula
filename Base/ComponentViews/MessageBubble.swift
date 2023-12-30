@@ -43,7 +43,8 @@ struct MessageBubble: View {
                 .padding()
                 .background(message.sender == .user ? Color.blue : backgroundColorForGPT)
                 .clipShape(bubbleShape(for: message.sender))
-                .frame(maxWidth: .infinity, alignment: message.sender == .user ? .trailing : .leading) // Messages aligned to the right
+                .frame(maxWidth: UIScreen.main
+                    .bounds.width*(2/3), alignment: message.sender == .user ? .trailing : .leading) // Messages aligned to the right
                 .padding()
             if message.sender == .gpt { Spacer() }
         }
@@ -93,7 +94,7 @@ struct MessageBubbleShapeGPT: Shape {
 struct MessageBubbleShape_Previews: PreviewProvider {
     
     static let sampleMessages = [
-        ChatMessage(id: UUID().uuidString, content: "Roink message", dateCreated: Date(), sender: .user),
+        ChatMessage(id: UUID().uuidString, content: "Roink message and wne and and and and and and and and and and message and wne and and and and and and and and and and ", dateCreated: Date(), sender: .user),
         ChatMessage(id: UUID().uuidString, content: "Boink", dateCreated: Date(), sender: .gpt),
         ChatMessage(id: UUID().uuidString, content: "Twoik message", dateCreated: Date(), sender: .user),
         

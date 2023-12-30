@@ -33,45 +33,48 @@ struct ConversationScreen: View {
     var body: some View {
         NavigationStack {
             VStack {
-                ScrollViewReader { scrollViewProxy in
-                    
-                    VStack(spacing: 8) {
-                        //ConversationTile(event: event)
-                        //ConversationTile(event: event)
-                        VStack(spacing: 5) {
-                            ForEach(viewModel.messages) { message in
-                                // Each message is in a blue rectangle with white text
-                                MessageBubble(message: message)
-                                    .transition(.asymmetric(insertion: .scale, removal: .opacity))
-                                
-                                
-                            }
-                        }
-                        .animation(.snappy(), value: viewModel.messages.count) // Trigger animation when message count changes
+                
+                ScrollView {
+                    ScrollViewReader { scrollViewProxy in
                         
+                        VStack(spacing: 8) {
+                            //ConversationTile(event: event)
+                            //ConversationTile(event: event)
+                            VStack(spacing: 5) {
+                                ForEach(viewModel.messages) { message in
+                                    // Each message is in a blue rectangle with white text
+                                    MessageBubble(message: message)
+                                        .transition(.asymmetric(insertion: .scale, removal: .opacity))
+                                    
+                                    
+                                }
+                            }
+                            .animation(.snappy(), value: viewModel.messages.count) // Trigger animation when message count changes
+                            
+                        }
+                        .onChange(of: viewModel.messages, perform: { newValue in
+                            guard let lastMessage = viewModel.messages.last else { return }
+                            
+                            // wait for a short moment to make sure we can actually scroll to the bottom
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                                withAnimation {
+                                    scrollViewProxy.scrollTo(lastMessage.id, anchor: .bottom)
+                                }
+                                focusedField = .message
+                            }
+                        })
                     }
-                    .onChange(of: viewModel.messages, perform: { newValue in
-                        guard let lastMessage = viewModel.messages.last else { return }
-                        
-                        // wait for a short moment to make sure we can actually scroll to the bottom
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                            withAnimation {
-                                scrollViewProxy.scrollTo(lastMessage.id, anchor: .bottom)
+                    .navigationTitle("Gemini Pro")
+                    .toolbar {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button {
+                                showingModelInfo = true
+                            } label: {
+                                Image(systemName: "info.circle")
                             }
-                            focusedField = .message
+                            
                         }
-                    })
                 }
-                .navigationTitle("Gemini Pro")
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button {
-                            showingModelInfo = true
-                        } label: {
-                            Image(systemName: "info.circle")
-                        }
-                        
-                    }
                 }
                 
                 NavigationLink("",  destination: ModelInformationView(), isActive: $showingModelInfo)
