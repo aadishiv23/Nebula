@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AC3F24572B419B5300C0346F /* ChatHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3F24562B419B5200C0346F /* ChatHistoryView.swift */; };
 		ACE0709B2B2EC250002E0768 /* BaseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE0709A2B2EC250002E0768 /* BaseApp.swift */; };
 		ACE0709D2B2EC251002E0768 /* MessagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE0709C2B2EC251002E0768 /* MessagesView.swift */; };
 		ACE0709F2B2EC252002E0768 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ACE0709E2B2EC252002E0768 /* Assets.xcassets */; };
@@ -32,6 +33,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AC3F24562B419B5200C0346F /* ChatHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatHistoryView.swift; sourceTree = "<group>"; };
 		ACE070972B2EC250002E0768 /* Base.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Base.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACE0709A2B2EC250002E0768 /* BaseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseApp.swift; sourceTree = "<group>"; };
 		ACE0709C2B2EC251002E0768 /* MessagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesView.swift; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 				ACE070B52B32AA62002E0768 /* ModelInformationView.swift */,
 				ACE070A82B2EC273002E0768 /* HomeView.swift */,
 				ACE070C02B34EC07002E0768 /* TempView.swift */,
+				AC3F24562B419B5200C0346F /* ChatHistoryView.swift */,
 			);
 			path = MainViews;
 			sourceTree = "<group>";
@@ -241,6 +244,7 @@
 			files = (
 				ACE070B42B31223B002E0768 /* ModelListView.swift in Sources */,
 				ACE070CD2B35CA41002E0768 /* MsgView.swift in Sources */,
+				AC3F24572B419B5300C0346F /* ChatHistoryView.swift in Sources */,
 				ACE070C72B35B909002E0768 /* ConversationViewModel.swift in Sources */,
 				ACE070B02B2FC685002E0768 /* Square.swift in Sources */,
 				ACE070B22B30840A002E0768 /* MessageBubble.swift in Sources */,
