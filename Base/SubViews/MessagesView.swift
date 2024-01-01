@@ -149,7 +149,7 @@ struct MessagesView: View {
 }
 
 
-struct ChatMessage: Identifiable, Equatable, Decodable {
+struct ChatMessage: Identifiable, Equatable, Encodable, Decodable {
     let id: String
     var content: String
     let dateCreated: Date

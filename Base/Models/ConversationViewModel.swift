@@ -13,7 +13,8 @@ import UIKit
 class ConversationViewModel: ObservableObject {
     /// Array to hold user's and message recipient's messages (system/gpt)
     @Published var messages = [ChatMessage]()
-    
+    private let historyFilename = "chat_history.json"
+
     /// Indicates whether waiting for model to finish
     @Published var busy = false
     
@@ -31,6 +32,7 @@ class ConversationViewModel: ObservableObject {
     init() {
         model = GenerativeModel(name: "gemini-pro", apiKey: APIKey.default)
         chat = model.startChat()
+        //Task { awaitloadChatHistory() }// from memory
     }
     
     func sendMessage(_ text: String, streaming: Bool = true) async {
@@ -120,5 +122,31 @@ class ConversationViewModel: ObservableObject {
                 messages.removeLast()
             }
         }
+    }
+    
+    // Save chat history to file
+    func saveChatHistory() async {
+        do {
+            let data = try JSONEncoder().encode(messages)
+            let fileURL = getDocumentDirectory().appendingPathComponent(historyFilename)
+            try data.write(to: fileURL)
+        } catch {
+            print("Error saving chat history: \(error)")
+        }
+    }
+    
+    // Load chat history
+    func loadChatHistory() async {
+        do {
+            let fileURL = getDocumentDirectory().appendingPathComponent(historyFilename)
+            let data = try Data(contentsOf: fileURL)
+            messages = try JSONDecoder().decode([ChatMessage].self, from: data)
+        } catch {
+            print("Error saving chat history: \(error)")
+        }
+    }
+    
+    private func getDocumentDirectory() -> URL {
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
     }
 }
