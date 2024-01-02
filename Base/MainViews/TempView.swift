@@ -20,7 +20,7 @@ import SwiftUI
 struct ConversationScreen: View {
     @EnvironmentObject var viewModel: ConversationViewModel
     @State private var showingModelInfo = false
-
+    
     @State private var userPrompt = ""
     
     enum FocusedField: Hashable {
@@ -74,7 +74,7 @@ struct ConversationScreen: View {
                             }
                             
                         }
-                }
+                    }
                 }
                 
                 NavigationLink("",  destination: ModelInformationView(), isActive: $showingModelInfo)
@@ -98,6 +98,10 @@ struct ConversationScreen: View {
                     Button(action: {
                         sendOrStop()
                         // Action for the button
+                        // Save chat history after sending a message
+                       /* Task {
+                            await viewModel.saveChatHistory()
+                        }*/
                     }) {
                         Image(systemName: "arrow.up.circle.fill")
                             .resizable()
@@ -111,7 +115,7 @@ struct ConversationScreen: View {
                 
             }
             .toolbar(.hidden, for: .tabBar)
-
+            
         }
     }
     
