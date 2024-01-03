@@ -21,6 +21,8 @@ let columns = [
 ]
 
 struct HomeView: View {
+    @State private var showingSettings = false //  control navigation
+
     var body: some View {
         NavigationStack {
             ScrollView(.vertical) {
@@ -36,6 +38,16 @@ struct HomeView: View {
                 .padding(.horizontal)
             }
             .navigationTitle("Home")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(action: {
+                        showingSettings = true // Activate the link when the button is tapped
+                    }) {
+                        Image(systemName: "gear") // Gear icon
+                    }
+
+                }
+            }
         }
     }
 }
