@@ -22,7 +22,7 @@ let columns = [
 
 struct HomeView: View {
     @State private var showingSettings = false //  control navigation
-
+    
     var body: some View {
         NavigationStack {
             ScrollView(.vertical) {
@@ -30,8 +30,8 @@ struct HomeView: View {
                     ForEach(array, id: \.self) {el in
                         ConversationTile(event: el)
                             .padding(.horizontal, 10)
-                            //.frame(height: 100)
-                            //.background(Color.gray.opacity(0.2)) // debug
+                        //.frame(height: 100)
+                        //.background(Color.gray.opacity(0.2)) // debug
                     }
                 }
                 .padding(.vertical)
@@ -45,9 +45,11 @@ struct HomeView: View {
                     }) {
                         Image(systemName: "gear") // Gear icon
                     }
-
+                    
                 }
             }
+            NavigationLink("", destination: PrivateView(), isActive: $showingSettings)
+                .hidden() // Hide the link since it's activated programmatically
         }
     }
 }

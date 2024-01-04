@@ -10,8 +10,8 @@ import Combine
 
 @main
 struct BaseApp: App {
+    @StateObject var viewModel = ConversationViewModel()
     var body: some Scene {
-        @State  var inp: String = ""
 
         WindowGroup {
             
@@ -23,12 +23,12 @@ struct BaseApp: App {
                 
                 ModelListView()
                     .tabItem {Label("User", systemImage: "list.bullet.clipboard")}
-                ConversationScreen()
+                /*ConversationScreen()
                     .tabItem {
                         Label("Temp", systemImage: "ellipsis.message.fill")
-                    }
+                    }*/
             }
-            .environmentObject(ConversationViewModel())  // Injecting the view model
+            .environmentObject(viewModel)  // Injecting the view model
         }
     }
 }

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		AC3F24572B419B5300C0346F /* ChatHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3F24562B419B5200C0346F /* ChatHistoryView.swift */; };
+		AC3F245B2B46F5BF00C0346F /* PrivateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3F245A2B46F5BF00C0346F /* PrivateView.swift */; };
 		ACE0709B2B2EC250002E0768 /* BaseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE0709A2B2EC250002E0768 /* BaseApp.swift */; };
 		ACE0709D2B2EC251002E0768 /* MessagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE0709C2B2EC251002E0768 /* MessagesView.swift */; };
 		ACE0709F2B2EC252002E0768 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ACE0709E2B2EC252002E0768 /* Assets.xcassets */; };
@@ -21,7 +22,7 @@
 		ACE070B92B34A995002E0768 /* OpenAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE070B82B34A995002E0768 /* OpenAIService.swift */; };
 		ACE070BC2B34AA73002E0768 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = ACE070BB2B34AA73002E0768 /* Alamofire */; };
 		ACE070BE2B34AF71002E0768 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE070BD2B34AF71002E0768 /* Constants.swift */; };
-		ACE070C12B34EC07002E0768 /* TempView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE070C02B34EC07002E0768 /* TempView.swift */; };
+		ACE070C12B34EC07002E0768 /* ConversationScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE070C02B34EC07002E0768 /* ConversationScreen.swift */; };
 		ACE070C52B355553002E0768 /* GenerativeAI-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ACE070C42B355553002E0768 /* GenerativeAI-Info.plist */; };
 		ACE070C72B35B909002E0768 /* ConversationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE070C62B35B909002E0768 /* ConversationViewModel.swift */; };
 		ACE070CA2B35B94F002E0768 /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = ACE070C92B35B94F002E0768 /* GoogleGenerativeAI */; };
@@ -34,6 +35,7 @@
 
 /* Begin PBXFileReference section */
 		AC3F24562B419B5200C0346F /* ChatHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatHistoryView.swift; sourceTree = "<group>"; };
+		AC3F245A2B46F5BF00C0346F /* PrivateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateView.swift; sourceTree = "<group>"; };
 		ACE070972B2EC250002E0768 /* Base.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Base.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACE0709A2B2EC250002E0768 /* BaseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseApp.swift; sourceTree = "<group>"; };
 		ACE0709C2B2EC251002E0768 /* MessagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesView.swift; sourceTree = "<group>"; };
@@ -47,7 +49,7 @@
 		ACE070B52B32AA62002E0768 /* ModelInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelInformationView.swift; sourceTree = "<group>"; };
 		ACE070B82B34A995002E0768 /* OpenAIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIService.swift; sourceTree = "<group>"; };
 		ACE070BD2B34AF71002E0768 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		ACE070C02B34EC07002E0768 /* TempView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempView.swift; sourceTree = "<group>"; };
+		ACE070C02B34EC07002E0768 /* ConversationScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationScreen.swift; sourceTree = "<group>"; };
 		ACE070C42B355553002E0768 /* GenerativeAI-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GenerativeAI-Info.plist"; sourceTree = "<group>"; };
 		ACE070C62B35B909002E0768 /* ConversationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationViewModel.swift; sourceTree = "<group>"; };
 		ACE070CC2B35CA41002E0768 /* MsgView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MsgView.swift; sourceTree = "<group>"; };
@@ -113,8 +115,9 @@
 			isa = PBXGroup;
 			children = (
 				ACE070B52B32AA62002E0768 /* ModelInformationView.swift */,
+				AC3F245A2B46F5BF00C0346F /* PrivateView.swift */,
 				ACE070A82B2EC273002E0768 /* HomeView.swift */,
-				ACE070C02B34EC07002E0768 /* TempView.swift */,
+				ACE070C02B34EC07002E0768 /* ConversationScreen.swift */,
 				AC3F24562B419B5200C0346F /* ChatHistoryView.swift */,
 			);
 			path = MainViews;
@@ -247,6 +250,7 @@
 				AC3F24572B419B5300C0346F /* ChatHistoryView.swift in Sources */,
 				ACE070C72B35B909002E0768 /* ConversationViewModel.swift in Sources */,
 				ACE070B02B2FC685002E0768 /* Square.swift in Sources */,
+				AC3F245B2B46F5BF00C0346F /* PrivateView.swift in Sources */,
 				ACE070B22B30840A002E0768 /* MessageBubble.swift in Sources */,
 				ACE070AE2B2FBCE7002E0768 /* ConversationTile.swift in Sources */,
 				ACE070A92B2EC273002E0768 /* HomeView.swift in Sources */,
@@ -256,7 +260,7 @@
 				ACE070B62B32AA62002E0768 /* ModelInformationView.swift in Sources */,
 				ACE070D22B35CA99002E0768 /* ErrorView.swift in Sources */,
 				ACE070D62B35CABA002E0768 /* BouncingDots.swift in Sources */,
-				ACE070C12B34EC07002E0768 /* TempView.swift in Sources */,
+				ACE070C12B34EC07002E0768 /* ConversationScreen.swift in Sources */,
 				ACE070D42B35CAAC002E0768 /* ErrorDetailView.swift in Sources */,
 				ACE070B92B34A995002E0768 /* OpenAIService.swift in Sources */,
 			);

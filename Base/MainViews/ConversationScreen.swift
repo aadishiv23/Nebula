@@ -85,8 +85,8 @@ struct ConversationScreen: View {
                     TextField("Message...", text: $userPrompt, axis: .vertical)
                         .padding(12)
                         .padding(.trailing, 48)
-                        .background(Color(uiColor: .systemBackground))
-                        .clipShape(Capsule())
+                        //.background(Color(uiColor: .systemBackground))
+                        //.clipShape(Capsule())
                         .glow(color: .blue, radius: 1)
                         .font(.subheadline)
                         .onSubmit { sendOrStop() }
@@ -99,7 +99,7 @@ struct ConversationScreen: View {
                         sendOrStop()
                         // Action for the button
                         // Save chat history after sending a message
-                       /* Task {
+                        /*Task {
                             await viewModel.saveChatHistory()
                         }*/
                     }) {

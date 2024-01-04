@@ -14,7 +14,7 @@ class ConversationViewModel: ObservableObject {
     /// Array to hold user's and message recipient's messages (system/gpt)
     @Published var messages = [ChatMessage]()
     private let historyFilename = "chat_history.json"
-
+    
     /// Indicates whether waiting for model to finish
     @Published var busy = false
     
@@ -75,12 +75,20 @@ class ConversationViewModel: ObservableObject {
             messages.append(systemMessage)
             
             do {
-                let responseStream = chat.sendMessageStream(text)
-                for try await chunk in responseStream {
-                    messages[messages.count - 1].pending = false
-                    if let text = chunk.text {
-                        messages[messages.count - 1].content += text
-                    }
+                /*let responseStream = chat.sendMessageStream(text)
+                 for try await chunk in responseStream {
+                 messages[messages.count - 1].pending = false
+                 if let text = chunk.text {
+                 messages[messages.count - 1].content += text
+                 }
+                 }*/
+                var response: GenerateContentResponse?
+                response = try await chat.sendMessage(text)
+                
+                if let responseText = response?.text {
+                    // Add system message after receiving the response
+                    let systemMessage = ChatMessage(id: UUID().uuidString, content: responseText, dateCreated: Date(), sender: .system)
+                    messages.append(systemMessage)
                 }
             } catch {
                 self.error = error
@@ -149,4 +157,5 @@ class ConversationViewModel: ObservableObject {
     private func getDocumentDirectory() -> URL {
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
     }
+    
 }
