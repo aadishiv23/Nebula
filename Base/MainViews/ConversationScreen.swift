@@ -31,7 +31,7 @@ struct ConversationScreen: View {
     var focusedField: FocusedField?
     
     @FocusState private var isBeingUsed: Bool
-
+    
     
     var body: some View {
         NavigationStack {
@@ -46,6 +46,7 @@ struct ConversationScreen: View {
                             VStack(spacing: 5) {
                                 ForEach(viewModel.messages) { message in
                                     // Each message is in a blue rectangle with white text
+                                    
                                     MessageBubble(message: message)
                                         .transition(.asymmetric(insertion: .scale, removal: .opacity))
                                     
@@ -82,6 +83,13 @@ struct ConversationScreen: View {
                 
                 NavigationLink("",  destination: ModelInformationView(), isActive: $showingModelInfo)
                     .animation(.snappy(duration: 0.2), value: viewModel.messages)
+                if viewModel.isLoading {
+                    BouncingDots()
+                        .frame(width: 100, height: 40)
+                        .background(.blue)
+                        .clipShape(Capsule())
+                        //.cornerRadius(10)
+                }
                 Spacer()
                 
                 ZStack(alignment: .trailing) {
@@ -89,10 +97,17 @@ struct ConversationScreen: View {
                         .focused($isBeingUsed)
                         .padding(12)
                         .padding(.trailing, 48)
-                        //.background(Color(uiColor: .systemBackground))
-                        //.clipShape(Capsule())
+                    //.background(Color(uiColor: .systemBackground))
+                    //.clipShape(Capsule())
                         .glow(color: .blue, radius: 1)
                         .font(.subheadline)
+                        .overlay {
+                            RoundedRectangle(
+                                cornerRadius: 8,
+                                style: .continuous
+                            )
+                            .stroke(Color(UIColor.systemFill), lineWidth: 1)
+                        }
                         .onSubmit {
                             sendOrStop()
                             hideKeyboard()
@@ -108,8 +123,8 @@ struct ConversationScreen: View {
                         // Action for the button
                         // Save chat history after sending a message
                         /*Task {
-                            await viewModel.saveChatHistory()
-                        }*/
+                         await viewModel.saveChatHistory()
+                         }*/
                     }) {
                         Image(systemName: "arrow.up.circle.fill")
                             .resizable()
@@ -126,10 +141,10 @@ struct ConversationScreen: View {
             
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
-                    Task {
-                        await viewModel.saveChatHistory()
-                    }
-                }
+            Task {
+                await viewModel.saveChatHistory()
+            }
+        }
     }
     
     private func sendMessage() {

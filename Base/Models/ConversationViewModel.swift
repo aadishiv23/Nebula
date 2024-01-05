@@ -17,7 +17,7 @@ class ConversationViewModel: ObservableObject {
     
     /// Indicates whether waiting for model to finish
     @Published var busy = false
-    
+    @Published var isLoading: Bool = false
     @Published var error: Error?
     var hasError: Bool {
         return error != nil
@@ -37,6 +37,8 @@ class ConversationViewModel: ObservableObject {
     
     func sendMessage(_ text: String, streaming: Bool = true) async {
         error = nil
+        self.isLoading = true
+        print("isloading =  true")
         if streaming {
             await internalSendMessageStreaming(text)
         }
@@ -71,8 +73,8 @@ class ConversationViewModel: ObservableObject {
             messages.append(userMessage)
             
             // add a pending message while awaiting response
-            let systemMessage = ChatMessage.pending(sender: .system)
-            messages.append(systemMessage)
+           // let systemMessage = ChatMessage.pending(sender: .system)
+            //messages.append(systemMessage)
             
             do {
                 /*let responseStream = chat.sendMessageStream(text)
@@ -90,6 +92,7 @@ class ConversationViewModel: ObservableObject {
                     let systemMessage = ChatMessage(id: UUID().uuidString, content: responseText, dateCreated: Date(), sender: .system)
                     messages.append(systemMessage)
                 }
+                self.isLoading = false
             } catch {
                 self.error = error
                 print(error.localizedDescription)
@@ -124,6 +127,7 @@ class ConversationViewModel: ObservableObject {
                     messages[messages.count - 1].content = responseText
                     messages[messages.count - 1].pending = false
                 }
+                self.isLoading = false
             } catch {
                 self.error = error
                 print(error.localizedDescription)

@@ -24,14 +24,14 @@ struct BouncingDots: View {
   @State
   private var dot3YOffset: CGFloat = 0.0
 
-  let animation = Animation.easeInOut(duration: 0.8)
+  let animation = Animation.easeInOut(duration: 0.4)
     .repeatForever(autoreverses: true)
 
   var body: some View {
     HStack(spacing: 8) {
       Circle()
         .fill(Color.white)
-        .frame(width: 10, height: 10)
+        .frame(width: 5, height: 5)
         .offset(y: dot1YOffset)
         .onAppear {
           withAnimation(self.animation.delay(0.0)) {
@@ -40,7 +40,7 @@ struct BouncingDots: View {
         }
       Circle()
         .fill(Color.white)
-        .frame(width: 10, height: 10)
+        .frame(width: 5, height: 5)
         .offset(y: dot2YOffset)
         .onAppear {
           withAnimation(self.animation.delay(0.2)) {
@@ -49,7 +49,7 @@ struct BouncingDots: View {
         }
       Circle()
         .fill(Color.white)
-        .frame(width: 10, height: 10)
+        .frame(width: 5, height: 5)
         .offset(y: dot3YOffset)
         .onAppear {
           withAnimation(self.animation.delay(0.4)) {
