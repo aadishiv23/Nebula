@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		AC3F24572B419B5300C0346F /* ChatHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3F24562B419B5200C0346F /* ChatHistoryView.swift */; };
 		AC3F245B2B46F5BF00C0346F /* PrivateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3F245A2B46F5BF00C0346F /* PrivateView.swift */; };
+		AC3F245D2B484F5300C0346F /* MessageField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3F245C2B484F5300C0346F /* MessageField.swift */; };
 		ACE0709B2B2EC250002E0768 /* BaseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE0709A2B2EC250002E0768 /* BaseApp.swift */; };
 		ACE0709D2B2EC251002E0768 /* MessagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE0709C2B2EC251002E0768 /* MessagesView.swift */; };
 		ACE0709F2B2EC252002E0768 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ACE0709E2B2EC252002E0768 /* Assets.xcassets */; };
@@ -36,6 +37,7 @@
 /* Begin PBXFileReference section */
 		AC3F24562B419B5200C0346F /* ChatHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatHistoryView.swift; sourceTree = "<group>"; };
 		AC3F245A2B46F5BF00C0346F /* PrivateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateView.swift; sourceTree = "<group>"; };
+		AC3F245C2B484F5300C0346F /* MessageField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageField.swift; sourceTree = "<group>"; };
 		ACE070972B2EC250002E0768 /* Base.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Base.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACE0709A2B2EC250002E0768 /* BaseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseApp.swift; sourceTree = "<group>"; };
 		ACE0709C2B2EC251002E0768 /* MessagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesView.swift; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 			children = (
 				ACE070AD2B2FBCE7002E0768 /* ConversationTile.swift */,
 				ACE070B12B30840A002E0768 /* MessageBubble.swift */,
+				AC3F245C2B484F5300C0346F /* MessageField.swift */,
 				ACE070AF2B2FC685002E0768 /* Square.swift */,
 			);
 			path = ComponentViews;
@@ -254,6 +257,7 @@
 				ACE070B22B30840A002E0768 /* MessageBubble.swift in Sources */,
 				ACE070AE2B2FBCE7002E0768 /* ConversationTile.swift in Sources */,
 				ACE070A92B2EC273002E0768 /* HomeView.swift in Sources */,
+				AC3F245D2B484F5300C0346F /* MessageField.swift in Sources */,
 				ACE070BE2B34AF71002E0768 /* Constants.swift in Sources */,
 				ACE0709D2B2EC251002E0768 /* MessagesView.swift in Sources */,
 				ACE0709B2B2EC250002E0768 /* BaseApp.swift in Sources */,

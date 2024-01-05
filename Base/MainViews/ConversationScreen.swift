@@ -30,6 +30,9 @@ struct ConversationScreen: View {
     @FocusState
     var focusedField: FocusedField?
     
+    @FocusState private var isBeingUsed: Bool
+
+    
     var body: some View {
         NavigationStack {
             VStack {
@@ -83,19 +86,24 @@ struct ConversationScreen: View {
                 
                 ZStack(alignment: .trailing) {
                     TextField("Message...", text: $userPrompt, axis: .vertical)
+                        .focused($isBeingUsed)
                         .padding(12)
                         .padding(.trailing, 48)
                         //.background(Color(uiColor: .systemBackground))
                         //.clipShape(Capsule())
                         .glow(color: .blue, radius: 1)
                         .font(.subheadline)
-                        .onSubmit { sendOrStop() }
+                        .onSubmit {
+                            sendOrStop()
+                            hideKeyboard()
+                        }
                     
                     
                     //.onSubmit(sendMessage) // Action when "Return" is pressed
                     //.submitLabel(.send)
                     //Spacer()
                     Button(action: {
+                        isBeingUsed = false
                         sendOrStop()
                         // Action for the button
                         // Save chat history after sending a message
@@ -117,6 +125,11 @@ struct ConversationScreen: View {
             .toolbar(.hidden, for: .tabBar)
             
         }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
+                    Task {
+                        await viewModel.saveChatHistory()
+                    }
+                }
     }
     
     private func sendMessage() {
@@ -159,3 +172,13 @@ struct ConversationScreen_Previews: PreviewProvider {
         }
     }
 }
+
+
+#if canImport(UIKit)
+extension View {
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
+#endif
+
