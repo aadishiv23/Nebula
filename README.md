@@ -50,3 +50,7 @@ Supports variety of LLMs
 
 
 ## Getting Started
+Download, configure, obtain Gemini API-key
+
+## More
+
