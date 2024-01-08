@@ -44,9 +44,11 @@ struct MessageBubble: View {
                 .background(message.sender == .user ? Color.blue : backgroundColorForGPT)
                 .clipShape(bubbleShape(for: message.sender))
                 .frame(maxWidth: UIScreen.main
-                    .bounds.width*(2/3), alignment: message.sender == .user ? .trailing : .leading) // Messages aligned to the right
+                    .bounds.width, alignment: message.sender == .user ? .trailing : .leading) // Messages aligned to the right
                 .padding()
-            if message.sender == .gpt { Spacer() }
+            if message.sender == .gpt {
+                Spacer()
+            }
         }
     }
     private var backgroundColorForGPT: Color {

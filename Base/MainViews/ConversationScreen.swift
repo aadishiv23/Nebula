@@ -168,23 +168,27 @@ struct ConversationScreen: View {
     }
 }
 
-struct ConversationScreen_Previews: PreviewProvider {
-    struct ContainerView: View {
-        @StateObject var viewModel = ConversationViewModel()
-        
-        var body: some View {
-            ConversationScreen()
-                .environmentObject(viewModel)
-                .onAppear {
-                    viewModel.messages = ChatMessage.samples
-                }
-        }
+extension ChatMessage {
+    static var chatSample: [ChatMessage] {
+        [
+            ChatMessage(id: UUID().uuidString, content: "Hello, how can I help you today?", dateCreated: Date(), sender: .system),
+            ChatMessage(id: UUID().uuidString, content: "I'm looking for information on SwiftUI.", dateCreated: Date(), sender: .user),
+            ChatMessage(id: UUID().uuidString, content: "Sure! SwiftUI is a framework used to build user interfaces for all Apple platforms.", dateCreated: Date(), sender: .system)
+        ]
     }
-    
+}
+
+struct ConversationScreen_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationStack {
-            ConversationScreen()
-        }
+        ConversationScreen()
+            .environmentObject(previewViewModel())
+    }
+
+    static func previewViewModel() -> ConversationViewModel {
+        let viewModel = ConversationViewModel()
+        viewModel.messages = ChatMessage.samples // Use the static sample data
+        // You can add more properties and configurations to the viewModel as needed for the preview
+        return viewModel
     }
 }
 
