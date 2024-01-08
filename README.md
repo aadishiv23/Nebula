@@ -29,6 +29,7 @@ Supports variety of LLMs
 ### 0.2
 - [x] Chat history with Gemini (slightly buggy)
 - [x] Chat history with ChatGPT
+- [x] UX/UI improvements + stability
 - [ ] Multi-modal Gemini Pro support
 - [ ] Unique Gemini chat sessions
 - [ ] Gemini chat history across chat sessions
