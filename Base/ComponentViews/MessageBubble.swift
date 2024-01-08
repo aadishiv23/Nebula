@@ -45,6 +45,14 @@ struct MessageBubble: View {
                 .clipShape(bubbleShape(for: message.sender))
                 .frame(maxWidth: UIScreen.main
                     .bounds.width, alignment: message.sender == .user ? .trailing : .leading) // Messages aligned to the right
+                .contextMenu {
+                    Button(action: {
+                        UIPasteboard.general.string = message.content
+                    }) {
+                        Text("Copy")
+                        Image(systemName: "doc.on.doc")
+                    }
+                }
                 .padding()
             if message.sender == .gpt {
                 Spacer()

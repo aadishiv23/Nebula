@@ -31,7 +31,8 @@ struct ConversationScreen: View {
     var focusedField: FocusedField?
     
     @FocusState private var isBeingUsed: Bool
-    
+    @FocusState private var isPhotoBeingUsed: Bool
+
     
     var body: some View {
         NavigationStack {
@@ -49,7 +50,7 @@ struct ConversationScreen: View {
                                     
                                     MessageBubble(message: message)
                                         .transition(.asymmetric(insertion: .scale, removal: .opacity))
-                                    
+                                        //.allowsHitTesting(true)
                                     
                                 }
                             }
@@ -92,49 +93,60 @@ struct ConversationScreen: View {
                 }
                 Spacer()
                 
-                ZStack(alignment: .trailing) {
-                    TextField("Message...", text: $userPrompt, axis: .vertical)
-                        .focused($isBeingUsed)
-                        .padding(12)
-                        .padding(.trailing, 48)
-                    //.background(Color(uiColor: .systemBackground))
-                    //.clipShape(Capsule())
-                        .glow(color: .blue, radius: 1)
-                        .font(.subheadline)
-                        .overlay {
-                            RoundedRectangle(
-                                cornerRadius: 8,
-                                style: .continuous
-                            )
-                            .stroke(Color(UIColor.systemFill), lineWidth: 1)
-                        }
-                        .onSubmit {
-                            sendOrStop()
-                            hideKeyboard()
-                        }
-                    
-                    
-                    //.onSubmit(sendMessage) // Action when "Return" is pressed
-                    //.submitLabel(.send)
-                    //Spacer()
+                HStack {
                     Button(action: {
-                        isBeingUsed = false
-                        sendOrStop()
-                        // Action for the button
-                        // Save chat history after sending a message
-                        /*Task {
-                         await viewModel.saveChatHistory()
-                         }*/
+                        isPhotoBeingUsed = false
                     }) {
-                        Image(systemName: "arrow.up.circle.fill")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 35, height: 35) // Set the size as needed
+                        Image(systemName: "camera")
+                            //.resizable()
+                            //.scaledToFit()
+                            .frame(width: 20, height: 20) // Set the size as needed
                             .foregroundColor(.blue) // Set the color as needed
                             .padding()
                     }
+                    
+                    ZStack(alignment: .trailing) {
+                        TextField("Message...", text: $userPrompt, axis: .vertical)
+                            .focused($isBeingUsed)
+                            .padding(12)
+                            .padding(.trailing, 48)
+                        //.background(Color(uiColor: .systemBackground))
+                        //.clipShape(Capsule())
+                            .glow(color: .blue, radius: 1)
+                            .font(.subheadline)
+                            .overlay {
+                                RoundedRectangle(
+                                    cornerRadius: 8,
+                                    style: .continuous
+                                )
+                                .stroke(Color(UIColor.systemFill), lineWidth: 1)
+                            }
+                            .onSubmit {
+                                sendOrStop()
+                                hideKeyboard()
+                            }
+                        //.onSubmit(sendMessage) // Action when "Return" is pressed
+                        //.submitLabel(.send)
+                        //Spacer()
+                        Button(action: {
+                            isBeingUsed = false
+                            sendOrStop()
+                            // Action for the button
+                            // Save chat history after sending a message
+                            /*Task {
+                             await viewModel.saveChatHistory()
+                             }*/
+                        }) {
+                            Image(systemName: "arrow.up.circle.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 35, height: 35) // Set the size as needed
+                                .foregroundColor(.blue) // Set the color as needed
+                                .padding()
+                        }
+                    }
+                    .padding(.horizontal)
                 }
-                .padding(.horizontal)
                 
             }
             .toolbar(.hidden, for: .tabBar)
