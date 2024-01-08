@@ -11,12 +11,19 @@ import SwiftUI
 struct PrivateView: View {
     @EnvironmentObject var viewModel: ConversationViewModel
     
+    let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium // for example: Jan 8, 2024
+        formatter.timeStyle = .short // for example: 12:00 AM
+        return formatter
+    }()
+    
     var body: some View {
         List(viewModel.messages, id: \.id) { message in
             VStack(alignment: .leading) {
                 Text(message.content)
                     .padding()
-                Text(message.dateCreated, style: .date)
+                Text(dateFormatter.string(from: message.dateCreated))
                     .font(.caption)
                     .foregroundColor(.gray)
             }
