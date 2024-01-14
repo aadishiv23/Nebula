@@ -36,4 +36,21 @@ class GeminiPhotoReasoningViewModel: ObservableObject {
     init() {
         model = GenerativeModel(name: "gemini-pro-vision", apiKey: APIKey.default)
     }
+    
+    func reason() async {
+        defer {
+            inProgress = false
+        }
+        guard let model else {
+            return
+        }
+        
+        do {
+            inProgress = true
+            errorMessage = nil
+            outputText = ""
+            
+            let prompt = "Look at the image(s), and then answer the following question: \(userInput)"
+        }
+    }
 }
