@@ -19,6 +19,7 @@ import SwiftUI
 
 struct ConversationScreen: View {
     @EnvironmentObject var viewModel: ConversationViewModel
+    @StateObject var photoViewModel = GeminiPhotoReasoningViewModel()
     @State private var showingModelInfo = false
     
     @State private var userPrompt = ""
