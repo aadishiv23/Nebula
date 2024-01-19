@@ -15,13 +15,14 @@
 //import GenerativeAIUIComponents
 import GoogleGenerativeAI
 import SwiftUI
+import PhotosUI
 
 
 struct ConversationScreen: View {
     @EnvironmentObject var viewModel: ConversationViewModel
     @StateObject var photoViewModel = GeminiPhotoReasoningViewModel()
     @State private var showingModelInfo = false
-    
+    @State private var isShowingPhotoPicker = false
     @State private var userPrompt = ""
     
     enum FocusedField: Hashable {
@@ -33,7 +34,7 @@ struct ConversationScreen: View {
     
     @FocusState private var isBeingUsed: Bool
     @FocusState private var isPhotoBeingUsed: Bool
-
+    
     
     var body: some View {
         NavigationStack {
@@ -51,7 +52,7 @@ struct ConversationScreen: View {
                                     
                                     MessageBubble(message: message)
                                         .transition(.asymmetric(insertion: .scale, removal: .opacity))
-                                        //.allowsHitTesting(true)
+                                    //.allowsHitTesting(true)
                                     
                                 }
                             }
@@ -90,20 +91,29 @@ struct ConversationScreen: View {
                         .frame(width: 100, height: 40)
                         .background(.blue)
                         .clipShape(Capsule())
-                        //.cornerRadius(10)
+                    //.cornerRadius(10)
                 }
                 Spacer()
                 
                 HStack {
                     Button(action: {
                         isPhotoBeingUsed = false
+                        isShowingPhotoPicker = true
                     }) {
                         Image(systemName: "camera")
-                            //.resizable()
-                            //.scaledToFit()
+                        //.resizable()
+                        //.scaledToFit()
                             .frame(width: 20, height: 20) // Set the size as needed
                             .foregroundColor(.blue) // Set the color as needed
                             .padding()
+                    }
+                    .sheet(isPresented: $isShowingPhotoPicker) {
+                        PhotosPicker(
+                            selection: $photoViewModel.selectedItems,
+                            matching: .images,
+                            photoLibrary: .shared()) {
+                                Text("Select Photo")
+                            }
                     }
                     
                     ZStack(alignment: .trailing) {
@@ -196,7 +206,7 @@ struct ConversationScreen_Previews: PreviewProvider {
         ConversationScreen()
             .environmentObject(previewViewModel())
     }
-
+    
     static func previewViewModel() -> ConversationViewModel {
         let viewModel = ConversationViewModel()
         viewModel.messages = ChatMessage.samples // Use the static sample data
