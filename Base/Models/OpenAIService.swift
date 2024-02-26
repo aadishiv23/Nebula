@@ -4,7 +4,7 @@
 //
 //  Created by Aadi Shiv Malhotra on 12/21/23.
 //
-
+/*
 import Foundation
 import Alamofire
 import Combine
@@ -42,3 +42,4 @@ struct OpenAIChatResponse: Decodable {
 struct OpenAIChatChoice: Decodable {
     let message: OpenAIChatMessage
 }
+*/

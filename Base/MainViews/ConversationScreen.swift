@@ -34,7 +34,13 @@ struct ConversationScreen: View {
     
     @FocusState private var isBeingUsed: Bool
     @FocusState private var isPhotoBeingUsed: Bool
+    //@State private var selectedImage: UIImage?
     
+    private func onSendTapped() {
+        Task {
+          await photoViewModel.reason()
+        }
+      }
     
     var body: some View {
         NavigationStack {
@@ -83,7 +89,7 @@ struct ConversationScreen: View {
                         }
                     }
                 }
-                
+                //NavigationLink(value: "", label: ModelInformationView())
                 NavigationLink("",  destination: ModelInformationView(), isActive: $showingModelInfo)
                     .animation(.snappy(duration: 0.2), value: viewModel.messages)
                 if viewModel.isLoading {
